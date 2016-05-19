@@ -148,49 +148,41 @@ func (m *Manager) sendMail(text string) {
 	}
 }
 
-func (m *Manager) Run() {
-	dur, err := time.ParseDuration(m.config.Loop)
-	if err != nil {
-		log.Fatal(errors.Wrap(err, "Could not parse duration from config"))
-	}
+func (m *Manager) run() {
 	if m.SM != nil {
-		// run once first
+		log.Notice("-----Starting Pings-----")
 		for ctx := range m.SM.Run() {
 			log.Errorf("%+v", ctx)
 			m.sendMail(ctx.Message())
 		}
+		log.Notice("-----Finished!-----")
 	}
+	log.Notice("-----Starting Process Monitors-----")
 	for _, monitor := range m.monitors {
 		for ctx := range monitor.Run() {
 			log.Errorf("%T %+v", ctx, ctx)
-			//m.sendMail(ctx.Message())
+			m.sendMail(ctx.Message())
 		}
 	}
+	log.Notice("-----Finished!-----")
+}
 
+func (m *Manager) Start() {
+	dur, err := time.ParseDuration(m.config.Loop)
+	if err != nil {
+		log.Fatal(errors.Wrap(err, "Could not parse duration from config"))
+	}
+	// run once
+	m.run()
 	// then start ticker
 	ticker := time.Tick(dur)
 	for _ = range ticker {
-		if m.SM != nil {
-			log.Notice("-----Starting Pings-----")
-			for ctx := range m.SM.Run() {
-				log.Errorf("%+v", ctx)
-				m.sendMail(ctx.Message())
-			}
-			log.Notice("-----Finished!-----")
-		}
-		log.Notice("-----Starting Process Monitors-----")
-		for _, monitor := range m.monitors {
-			for ctx := range monitor.Run() {
-				log.Errorf("%T %+v", ctx, ctx)
-				//m.sendMail(ctx.Message())
-			}
-		}
-		log.Notice("-----Finished!-----")
+		m.run()
 	}
 }
 
 func main() {
 	m := NewManager()
 	m.LoadConfig(os.Args[1])
-	m.Run()
+	m.Start()
 }
