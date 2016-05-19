@@ -129,7 +129,7 @@ func (sm *ServerMonitor) listenICMP6() {
 	// close the old socket
 	sm.icmp6.Close()
 
-	if sm.icmp6, err = icmp.ListenPacket("udp6", "::%he-ipv6"); err != nil {
+	if sm.icmp6, err = icmp.ListenPacket("udp6", "::"); err != nil {
 		log.Fatal(errors.Wrap(err, "Could not listen ipv6 icmp socket"))
 	}
 }
@@ -206,8 +206,8 @@ func (sm *ServerMonitor) ping(address string) error {
 	return err
 }
 
-func (sm *ServerMonitor) Run() chan failedHostContext {
-	failures := make(chan failedHostContext)
+func (sm *ServerMonitor) Run() chan Failure {
+	failures := make(chan Failure)
 	go func() {
 		for address, _ := range sm.addresses {
 			log.Info(printYellow("Pinging ", address))

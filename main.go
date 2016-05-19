@@ -15,6 +15,8 @@ import (
 var log = logging.MustGetLogger("panopticon")
 var format = "%{color}%{level} %{time:Jan 02 15:04:05} %{shortfile}%{color:reset} ▶ %{message}"
 var FailedHost *template.Template
+var FailedProgram *template.Template
+var FailedSSH *template.Template
 
 var printYellow = color.New(color.FgYellow).SprintFunc()
 var printGreen = color.New(color.FgGreen).SprintFunc()
@@ -30,19 +32,30 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	FailedProgram, err = template.New("failedprogram").Parse(failedProgramTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	FailedSSH, err = template.New("failedSSH").Parse(failedSSHTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 type Manager struct {
-	SM     *ServerMonitor
-	mailer *gomail.Dialer
-	config Config
-	hosts  map[string]Host
+	SM       *ServerMonitor
+	mailer   *gomail.Dialer
+	config   Config
+	hosts    map[string]Host
+	monitors []*ProcessMonitor
 }
 
 func NewManager() *Manager {
 	return &Manager{
-		SM:    NewServerMonitor(10),
-		hosts: make(map[string]Host),
+		hosts:    make(map[string]Host),
+		monitors: []*ProcessMonitor{},
 	}
 }
 
@@ -59,10 +72,30 @@ type Host struct {
 	Name string
 }
 
+type Program struct {
+	Name        string
+	Process     string
+	LogLocation string
+}
+
+type SSHConfig struct {
+	User     string
+	Server   string
+	Password string
+	Key      string
+	Port     string
+}
+
+type ProgramConfig struct {
+	Server   SSHConfig
+	Programs []Program
+}
+
 type Config struct {
-	Mail  Mailconfig
-	Loop  string // time.Duration
-	Hosts []Host
+	Mail     Mailconfig
+	Loop     string // time.Duration
+	Hosts    []Host
+	Monitors []ProgramConfig
 }
 
 func (m *Manager) LoadConfig(filename string) {
@@ -85,9 +118,21 @@ func (m *Manager) LoadConfig(filename string) {
 	log.Infof("Email server: %+v", m.config.Mail)
 	m.mailer = gomail.NewDialer(m.config.Mail.Server, m.config.Mail.Port, m.config.Mail.Username, m.config.Mail.Password)
 
+	if len(m.config.Hosts) > 0 {
+		m.SM = NewServerMonitor(10)
+	}
 	for _, host := range m.config.Hosts {
 		m.SM.addDestination(host)
 		m.hosts[host.Host] = host
+	}
+
+	for _, monitor := range m.config.Monitors {
+		log.Infof("SSH server: %+v", monitor.Server)
+		pm := NewProcessMonitor(monitor.Server)
+		for _, program := range monitor.Programs {
+			pm.addProgram(program)
+		}
+		m.monitors = append(m.monitors, pm)
 	}
 }
 
@@ -108,21 +153,36 @@ func (m *Manager) Run() {
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "Could not parse duration from config"))
 	}
-	// run once first
-	for ctx := range m.SM.Run() {
-		if ctx.Error != nil {
+	if m.SM != nil {
+		// run once first
+		for ctx := range m.SM.Run() {
 			log.Errorf("%+v", ctx)
-			m.sendMail(failHost(ctx))
+			m.sendMail(ctx.Message())
 		}
 	}
+	for _, monitor := range m.monitors {
+		for ctx := range monitor.Run() {
+			log.Errorf("%T %+v", ctx, ctx)
+			//m.sendMail(ctx.Message())
+		}
+	}
+
 	// then start ticker
 	ticker := time.Tick(dur)
 	for _ = range ticker {
-		log.Notice("-----Starting Pings-----")
-		for ctx := range m.SM.Run() {
-			if ctx.Error != nil {
+		if m.SM != nil {
+			log.Notice("-----Starting Pings-----")
+			for ctx := range m.SM.Run() {
 				log.Errorf("%+v", ctx)
-				m.sendMail(failHost(ctx))
+				m.sendMail(ctx.Message())
+			}
+			log.Notice("-----Finished!-----")
+		}
+		log.Notice("-----Starting Process Monitors-----")
+		for _, monitor := range m.monitors {
+			for ctx := range monitor.Run() {
+				log.Errorf("%T %+v", ctx, ctx)
+				//m.sendMail(ctx.Message())
 			}
 		}
 		log.Notice("-----Finished!-----")
