@@ -9,5 +9,6 @@ Run with `panopticon monitor.yaml`
 
 ## Coming Soon
 
-- [ ] Remote process monitoring
+- [x] Remote process monitoring
 - [ ] Unpriveleged pings (may be impossible w/ Go?)
+- [ ] Reporting logs in process monitoring
