@@ -1,0 +1,6 @@
+{
+  "name": "Panopticon",
+  "tagline": "Basic server monitoring in Go",
+  "body": "Panopticon\r\n==========\r\n\r\nCurrently has to be run as root for the ICMP messages.\r\n\r\nLook in [`monitor.yaml`](https://github.com/gtfierro/panopticon/blob/master/monitor.yaml) for example config.\r\n\r\nRun with `panopticon monitor.yaml`\r\n\r\n## Coming Soon\r\n\r\n- [ ] Remote process monitoring\r\n- [ ] Unpriveleged pings (may be impossible w/ Go?)\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
