@@ -46,7 +46,6 @@ type ServerMonitor struct {
 }
 
 func NewServerMonitor(timeout int) *ServerMonitor {
-	var err error
 	sm := &ServerMonitor{
 		Timeout:   timeout,
 		addresses: make(map[string]*pingAddress),
@@ -55,10 +54,7 @@ func NewServerMonitor(timeout int) *ServerMonitor {
 		hosts:     make(map[string]Host),
 	}
 
-	sm.icmp6, err = icmp.ListenPacket("udp6", "::%he-ipv6")
-	if err != nil {
-		log.Fatal(errors.Wrap(err, "Could not listen ipv6 icmp socket"))
-	}
+	sm.listenICMP6()
 
 	go func() {
 		buf := make([]byte, 1500)
@@ -90,11 +86,7 @@ func NewServerMonitor(timeout int) *ServerMonitor {
 		}
 	}()
 
-	sm.icmp4, err = icmp.ListenPacket("udp4", "0.0.0.0")
-	if err != nil {
-		log.Fatal(errors.Wrap(err, "Could not listen ipv4 icmp socket"))
-	}
-
+	sm.listenICMP4()
 	go func() {
 		buf := make([]byte, 1500)
 		for {
@@ -134,7 +126,9 @@ func (sm *ServerMonitor) listenICMP6() {
 	defer func() {
 		sm.icmp6L.Unlock()
 	}()
+	// close the old socket
 	sm.icmp6.Close()
+
 	if sm.icmp6, err = icmp.ListenPacket("udp6", "::%he-ipv6"); err != nil {
 		log.Fatal(errors.Wrap(err, "Could not listen ipv6 icmp socket"))
 	}
@@ -144,6 +138,7 @@ func (sm *ServerMonitor) listenICMP4() {
 	sm.icmp4L.Lock()
 	defer sm.icmp4L.Unlock()
 	sm.icmp4.Close()
+
 	if sm.icmp4, err = icmp.ListenPacket("udp4", "0.0.0.0"); err != nil {
 		log.Fatal(errors.Wrap(err, "Could not listen ipv4 icmp socket"))
 	}
