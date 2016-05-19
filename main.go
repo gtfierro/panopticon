@@ -34,7 +34,7 @@ func init() {
 
 type Manager struct {
 	SM     *ServerMonitor
-	mailer gomail.SendCloser
+	mailer *gomail.Dialer
 	config Config
 	hosts  map[string]Host
 }
@@ -82,14 +82,8 @@ func (m *Manager) LoadConfig(filename string) {
 		log.Fatal(errors.Wrap(err, "Could not load config"))
 	}
 
-	//m.mailRecipients = mailConfig.Key("recipients").Strings(",")
-
 	log.Infof("Email server: %+v", m.config.Mail)
-	mailer := gomail.NewDialer(m.config.Mail.Server, m.config.Mail.Port, m.config.Mail.Username, m.config.Mail.Password)
-	m.mailer, err = mailer.Dial()
-	if err != nil {
-		log.Critical(errors.Wrap(err, "Could not dial email server"))
-	}
+	m.mailer = gomail.NewDialer(m.config.Mail.Server, m.config.Mail.Port, m.config.Mail.Username, m.config.Mail.Password)
 
 	for _, host := range m.config.Hosts {
 		m.SM.addDestination(host)
@@ -104,7 +98,7 @@ func (m *Manager) sendMail(text string) {
 	msg.SetHeader("Subject", "Chair Report")
 	msg.SetBody("text/plain", text)
 
-	if err := m.mailer.Send(m.config.Mail.Username, m.config.Mail.Recipients, msg); err != nil {
+	if err := m.mailer.DialAndSend(msg); err != nil {
 		log.Critical(errors.Wrap(err, "Could not send mail"))
 	}
 }
