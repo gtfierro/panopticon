@@ -1,0 +1,16 @@
+mail:
+    server: smtp.gmail.com # smtp server
+    port: 587
+    username: <gmail address> # full gmail address
+    password: <gmail apssword> # password
+    recipients: [a@example.com, b@example.com] # list of addresses that will receive error reports
+loop: 60m # how often to check for uptime
+hosts: # list of servers to ping
+    - host: google.com   # will resolve the hostname
+      name: Primary server # name is additional context to include in the email
+
+    - host: 8.8.8.8 # can handle IPv4 addresses
+      name: DNS server
+
+    - host: fe80::1 # can handle IPv6 addresses
+      name: Localhost
