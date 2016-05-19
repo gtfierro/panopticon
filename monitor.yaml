@@ -14,3 +14,15 @@ hosts: # list of servers to ping
 
     - host: fe80::1 # can handle IPv6 addresses
       name: Localhost
+monitors: # monitor processes running on remote servers
+    - server:
+        user: ubuntu
+        server: myserver.example.com
+        key: /absolute/path/to/ssh/key
+        password: can also use password
+        port: 22 # defaults to 22
+      programs:
+        - name: BtrDB # human readable name of the process
+          process: btrdbd # argument to pgrep
+        - name: Giles
+          process: giles # specify as many as you want
