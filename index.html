@@ -1,56 +1,122 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Panopticon by gtfierro</title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Gabe Fierro</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+    <h1><u>Gabe Fierro</u></h1>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Panopticon</h1>
-        <p>Basic server monitoring in Go</p>
+    <img src="gabe.png" alt="This is a picture of Gabe, but you knew that, didn't you?" title="Photo Credit: SF Chronicle"/>
 
-        <p class="view"><a href="https://github.com/gtfierro/panopticon">View the Project on GitHub <small>gtfierro/panopticon</small></a></p>
+    <p class="intro">
+    I am a 1st year PhD student at UC Berkeley working with <a href="http://www.cs.berkeley.edu/~culler/">David Culler</a> on the <a
+    href="http://sdb.cs.berkeley.edu/sdb/">Software Defined Buildings</a> project. I received my undergraduate degree in EECS from UC Berkeley and
+    worked on the <a href="http://local.cs.berkeley.edu/wiki2/">LoCal</a> project. I work on developing infrastructure for smarter buildings.
+    </p>
+
+    <ul>
+        <li>
+            <u>Email</u>: gtfierro AT eecs DOT berkeley DOT edu
+        </li>
+        <li>
+            <u>Github</u> <a href="https://github.com/gtfierro">gtfierro</a>
+        </li>
+        <li>
+            <u>IRC</u>: I hang out on #go-nuts at irc.freenode.net with the handle <b>gtf</b>
+        </li>
+        <li>
+            <del>LinkedIn</del>: please do not click whatever button people click to spam me with emails trying to get me to join
+        </li>
+    </ul>
+
+    <br />
+
+    <h2>Links</h2>
+
+    <ul>
+        <li>
+            <a href="projects">Projects</a>: past and current projects
+        </li>
+        <li>
+            <a href="recipes">Recipes</a>: bread, etc
+        </li>
+    </ul>
+
+    <h2>Publications</h2>
+
+    <p>
+    <b>System Design for a Synergistic, Low Power Mote/BLE Embedded Platform</b>
+    <a href="papers/synergy.pdf">[pdf]</a>
+    <br />
+    Michael P Andersen, Gabe Fierro, David Culler. EECS Department, UC Berkeley.
+    <em>15th ACM/IEEE Conference onInformation Processing in Sensor Networks</em>, Vienna, Austria, April 2016.
+    </p>
 
 
-        <ul>
-          <li><a href="https://github.com/gtfierro/panopticon/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/gtfierro/panopticon/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/gtfierro/panopticon">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="panopticon" class="anchor" href="#panopticon" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Panopticon</h1>
+    <p>
+    <b>Enabling Synergy in IoT: Platform to Service and Beyond</b>
+    <a href="papers/enabling_synergy.pdf">[pdf]</a><a href="https://docs.google.com/presentation/d/1SuPrXFqjCmddPCHmwQ0Ysk4hrwuRnF3TU5KEWq0egYg/edit?usp=sharing">[slides]</a>
+    <br />
+    Michael P Andersen, Gabe Fierro, David Culler. EECS Department, UC Berkeley.
+    <em>1st IEEE International Conference on Internet-of-Things Design and Implementation</em>, Berlin, Germany, April 2016.
+    </p>
 
-<p>Currently has to be run as root for the ICMP messages.</p>
+    <p>
+    <b>XBOS: An Extensible Building Operating System</b>
+    <a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2015/EECS-2015-197.pdf">[link]</a><a href="papers/EECS-2015-197.pdf">[pdf]</a>
+    <br />
+    Gabe Fierro and David Culler. EECS Department, UC Berkeley. <em>Technical Report No. UCB/EECS-2015-197</em>, September 2015.
+    </p>
 
-<p>Look in <a href="https://github.com/gtfierro/panopticon/blob/master/monitor.yaml"><code>monitor.yaml</code></a> for example config.</p>
+    <p>
+    <b>Open Software-Architecture for Building Monitoring and Control</b>
+    <a href="papers/open_arch.pdf">[pdf]</a>
+    <br />
+    Carl Blumstein, David Culler, Gabe Fierro, Therese Peffer and Marco Pritoni.
+    <em>Sustainable Places 2015</em>, Sevona, Italy, September 2015.
+    </p>
 
-<p>Run with <code>panopticon monitor.yaml</code></p>
+    <p>
+    <b>BOSS: Building Operating System Services</b>
+    <a href="papers/boss.pdf">[pdf]</a>
+    <br />
+    Stephen Dawson-Haggerty, Andrew Krioukov, Jay Taneja, Sagar Karandikar, Gabe Fierro, Nikita Kitaev, and David Culler.
+    <em>10th USENIX Symposium on Networked Systems Design and Implementation</em>, Lombard, IL, April 2013.
+    </p>
 
-<h2>
-<a id="coming-soon" class="anchor" href="#coming-soon" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Coming Soon</h2>
+    <p>
+    <b>BAS: Building Application Stack</b>
+    <a href="papers/bas.pdf">[pdf]</a>
+    <br />
+    Andrew Krioukov, Gabe Fierro, Nikita Kitaev, David Culler. 
+    <em>4th ACM Workshop On Embedded Sensing Systems For Energy-Efficiency In Buildings</em>, Toronto, Canada, November 2012.
+    </p>
 
-<ul>
-<li>[ ] Remote process monitoring</li>
-<li>[ ] Unpriveleged pings (may be impossible w/ Go?)</li>
-</ul>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/gtfierro">gtfierro</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+    <p>
+    <b>Demo Abstract: Zone-level occupancy counting with existing infrastructure</b>
+    <a href="papers/zonelevelocc.pdf">[pdf]</a>
+    <br />
+    Gabe Fierro, Omar Rehmane, Andrew Krioukov, David Culler
+    <em>4th ACM Workshop On Embedded Sensing Systems For Energy-Efficiency In Buildings</em>, Toronto, Canada, November 2012.
+    </p>
+
+    <p>
+    <b>Demo Abstract: BUSICO 3D: building simulation and control in unity 3D</b>
+    <a href="papers/busico3d.pdf">[pdf]</a>
+    <br />
+    Jonathan Fürst, Gabe Fierro, Philippe Bonnet, David E Culler
+    <em>12th ACM Conference on Embedded Network Sensor Systems</em>
+    </p>
+
+    <p>
+    <b>Automated Disambiguation of US Patent Grants and Applications</b>
+    <a href="papers/AutomatedDisambiguation-of-US-Patent-Grants-and-Applications.pdf">[pdf]</a>
+    <br />
+    Benjamin Balsmeier, Alireza Chavosh, Guan-Cheng Li, Gabe Fierro, Kevin Johnson, Aditya Kaulagi, Doug O’Reagan, Bill Yeh, Lee Fleming
+    </p>
+
+    </body>
 </html>
