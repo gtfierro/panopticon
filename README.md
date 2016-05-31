@@ -7,6 +7,11 @@ Look in [`monitor.yaml`](https://github.com/gtfierro/panopticon/blob/master/moni
 
 Run with `panopticon monitor.yaml`
 
+May need to run
+```
+$ sudo sysctl -w net.ipv4.ping_group_range="0 0"
+```
+
 ## Coming Soon
 
 - [x] Remote process monitoring
